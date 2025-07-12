@@ -1,0 +1,21 @@
+---
+- name: "eks-cluster-v3"
+  current_cluster_version: "1.30" 
+  target_version: "1.31"
+  cluster_backup_taken: "yes" 
+  region: "ap-south-1"
+  node_pools:
+    - nodegroup-2
+    - nodegroup-1
+  kubeconfig_secret: aws-kubeconfig
+  slack_channel: jenkins
+  add_ons:
+    - name: vpc-cni
+      namespace: kube-system
+      version: v1.19.4-eksbuild.1
+    - name: coredns
+      namespace: kube-system
+      version: v1.11.4-eksbuild.2
+    - name: kube-proxy
+      namespace: kube-system
+      version: v1.31.2-eksbuild.3
