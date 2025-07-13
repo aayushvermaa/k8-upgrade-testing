@@ -1,12 +1,11 @@
 ---
 - name: "eks-cluster-v3"
-  current_cluster_version: "1.30" 
-  target_version: "1.31"
+  current_cluster_version: "1.31" 
+  target_version: "1.32"
   cluster_backup_taken: "yes" 
-  region: "ap-south-1"
+  region: "us-east-1"
   node_pools:
-    - nodegroup-2
-    - nodegroup-1
+    - node-eks1
   kubeconfig_secret: aws-kubeconfig
   slack_channel: jenkins
   add_ons:
