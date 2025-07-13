@@ -1,5 +1,5 @@
 ---
-- name: "eks-cluster-v3"
+- name: "eks"
   current_cluster_version: "1.31" 
   target_version: "1.32"
   cluster_backup_taken: "yes" 
