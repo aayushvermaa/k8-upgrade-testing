@@ -1,11 +1,11 @@
 ---
-- name: "eks"
+- name: "testing"
   current_cluster_version: "1.31" 
   target_version: "1.32"
   cluster_backup_taken: "yes" 
-  region: "us-east-1"
+  region: "ap-south-1"
   node_pools:
-    - node-eks1
+    - test
   kubeconfig_secret: aws-kubeconfig
   slack_channel: jenkins
   add_ons:
