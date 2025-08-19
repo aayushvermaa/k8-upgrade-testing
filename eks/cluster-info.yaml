@@ -1,9 +1,9 @@
 ---
-- name: "kubelift-eks-cluster"
-  current_cluster_version: "1.30" 
-  target_version: "1.31"
+- name: "testing"
+  current_cluster_version: "1.29" 
+  target_version: "1.30"
   cluster_backup_taken: "yes" 
-  region: "us-east-1"
+  region: "ap-south-1"
   node_pools:
     - worker-1-nodes
   kubeconfig_secret: aws-kubeconfig
@@ -11,13 +11,11 @@
   add_ons:
     - name: vpc-cni
       namespace: kube-system
-      version: v1.19.2-eksbuild.1
+      version: v1.20.1-eksbuild.1
     - name: coredns
       namespace: kube-system
-      version: v1.11.1-eksbuild.8
+      version: v1.11.4-eksbuild.20
     - name: kube-proxy
       namespace: kube-system
-      version: v1.30.6-eksbuild.3
-    - name: aws-ebs-csi-driver
-      namespace: kube-system
-      version: v1.43.0-eksbuild.1
+      version: v1.29.15-eksbuild.14
+
