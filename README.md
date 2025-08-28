@@ -61,7 +61,7 @@ Create the following environments in BuildPiper:
 - Configure Deployment Details
 
     <img width="2410" height="1456" alt="image" src="https://github.com/user-attachments/assets/2b161cdd-ec4f-45a2-bad9-01c5f7b88e70" />
-    
+
 > **Note:** The Helm release name must be set to `vm` for the Monitoring service.
 
 
@@ -89,8 +89,8 @@ Create the following environments in BuildPiper:
     <img width="2360" height="636" alt="image" src="https://github.com/user-attachments/assets/186bd14f-baa5-4fad-8575-266ca7d7108d" />
 
 
-> NOTE;-
-> Apply the same setup for Observability
+> NOTE:-
+> Apply the same setup for Observability service and sub service
 
 ## **5. BP Deployment Pre-Hook Workflow**
 
