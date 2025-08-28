@@ -89,133 +89,70 @@ Create the following environments in BuildPiper:
 
 #!/bin/bash
 
-  
-
 gitUrl=$1
-
 gitBranch=$2
-
 crdfile=$3
 
-  
-
 if [[ -z "$gitUrl" || -z "$gitBranch" || -z "$crdfile" ]]; then
-
-echo "Error: Missing arguments!"
-
-echo "Usage: $0 <gitUrl> <gitBranch> <crdfile>"
-
-exit 1
-
+    echo "Error: Missing arguments!"
+    echo "Usage: $0 <gitUrl> <gitBranch> <crdfile>"
+    exit 1
 fi
 
-  
-
 export KUBECONFIG=~/.kube/apnamart-gcp-devuat-cluster/config
-
 LOG_FILE="crd_apply.log"
-
 > "$LOG_FILE"
-
-  
 
 echo "Applying Prometheus CRDs... logs will be saved in $LOG_FILE"
 
-  
-
 CRDS=(
-
-"https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml"
-
-"https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml"
-
-"https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml"
-
-"https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml"
-
-"https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml"
-
-"https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml"
-
-"https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml"
-
+    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml"
+    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml"
+    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml"
+    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml"
+    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml"
+    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml"
+    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml"
 )
 
-  
-
 for crd in "${CRDS[@]}"; do
-
-echo "Applying $crd ..."
-
-kubectl apply --server-side --validate=false -f "$crd" >> "$LOG_FILE" 2>&1
-
-if [[ $? -ne 0 ]]; then
-
-echo "Failed: $crd (see $LOG_FILE for details)"
-
-else
-
-echo "Success: $crd"
-
-fi
-
+    echo "Applying $crd ..."
+    kubectl apply --server-side --validate=false -f "$crd" >> "$LOG_FILE" 2>&1
+    if [[ $? -ne 0 ]]; then
+        echo "Failed: $crd (see $LOG_FILE for details)"
+    else
+        echo "Success: $crd"
+    fi
 done
-
-  
 
 echo "Applying VictoriaMetrics CRDs from private repo..."
 
-  
-
 WORKDIR="/tmp/apnamart-gcp"
 
-  
-
 if [[ -d "$WORKDIR" ]]; then
-
-cd "$WORKDIR" && git pull origin "$gitBranch" >> "$LOG_FILE" 2>&1
-
+    cd "$WORKDIR" && git pull origin "$gitBranch" >> "$LOG_FILE" 2>&1
 else
-
-git clone "$gitUrl" -b "$gitBranch" "$WORKDIR" >> "$LOG_FILE" 2>&1
-
-cd "$WORKDIR"
-
+    git clone "$gitUrl" -b "$gitBranch" "$WORKDIR" >> "$LOG_FILE" 2>&1
+    cd "$WORKDIR"
 fi
-
-  
 
 if [[ -f "$crdfile" ]]; then
-
-echo "Applying $crdfile ..."
-
-details=$(kubectl apply -f "$crdfile" 2>&1 | tee -a "$LOG_FILE")
-
-if [[ $? -ne 0 ]]; then
-
-echo "Failed: $crdfile"
-
-echo "Details: $details"
-
+    echo "Applying $crdfile ..."
+    details=$(kubectl apply -f "$crdfile" 2>&1 | tee -a "$LOG_FILE")
+    if [[ $? -ne 0 ]]; then
+        echo "Failed: $crdfile"
+        echo "Details: $details"
+    else
+        echo "Success: $crdfile"
+        echo "Details: $details"
+    fi
 else
-
-echo "Success: $crdfile"
-
-echo "Details: $details"
-
+    echo "$crdfile not found in repo!"
 fi
-
-else
-
-echo "$crdfile not found in repo!"
-
-fi
-
-  
 
 echo "All CRDs processed. Check $LOG_FILE for details."
-
 rm -rf "$WORKDIR"
+
 
 ```
 
