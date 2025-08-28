@@ -109,76 +109,63 @@ Create the following environments in BuildPiper:
 
 ### **1. Monitoring CRDs Pre-Hook**
 
-#### **Script: `pre-hook-crd.sh`**
+#### **Script: `prehook-crd-apply.sh`**
 
 ```bash
-
 #!/bin/bash
 
-gitUrl=$1
-gitBranch=$2
-crdfile=$3
+Cluster_Name=$1
+VM_VERSION=$2
 
-if [[ -z "$gitUrl" || -z "$gitBranch" || -z "$crdfile" ]]; then
-    echo "Error: Missing arguments!"
-    echo "Usage: $0 <gitUrl> <gitBranch> <crdfile>"
-    exit 1
+#VM_VERSION="0.58.0"
+
+if [[ -z "$Cluster_Name" || -z "$VM_VERSION" ]]; then
+  echo "Usage: $0 <Cluster_Name> <VM_VERSION>"
+  exit 1
 fi
 
-export KUBECONFIG=~/.kube/apnamart-gcp-devuat-cluster/config
+export KUBECONFIG=~/.kube/${Cluster_Name}/config
+
 LOG_FILE="crd_apply.log"
 > "$LOG_FILE"
 
-echo "Applying Prometheus CRDs... logs will be saved in $LOG_FILE"
+echo "Applying CRDs... logs will be saved in $LOG_FILE"
 
-CRDS=(
-    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml"
-    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml"
-    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml"
-    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml"
-    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml"
-    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml"
-    "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml"
+PROM_CRDS=(
+  "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml"
+  "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml"
+  "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml"
+  "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml"
+  "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml"
+  "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml"
+  "https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml"
 )
 
-for crd in "${CRDS[@]}"; do
-    echo "Applying $crd ..."
-    kubectl apply --server-side --validate=false -f "$crd" >> "$LOG_FILE" 2>&1
-    if [[ $? -ne 0 ]]; then
-        echo "Failed: $crd (see $LOG_FILE for details)"
-    else
-        echo "Success: $crd"
-    fi
+for crd in "${PROM_CRDS[@]}"; do
+  echo "Applying $crd ..."
+  kubectl apply --server-side --validate=false -f "$crd" >> "$LOG_FILE" 2>&1
+  if [[ $? -ne 0 ]]; then
+    echo "Failed: $crd (see $LOG_FILE for details)"
+  else
+    echo "Success: $crd"
+  fi
 done
 
-echo "Applying VictoriaMetrics CRDs from private repo..."
 
-WORKDIR="/tmp/apnamart-gcp"
+VM_CRD="https://raw.githubusercontent.com/VictoriaMetrics/helm-charts/refs/tags/victoria-metrics-k8s-stack-${VM_VERSION}/charts/victoria-metrics-operator/crd.yaml"
 
-if [[ -d "$WORKDIR" ]]; then
-    cd "$WORKDIR" && git pull origin "$gitBranch" >> "$LOG_FILE" 2>&1
+echo "Applying VictoriaMetrics CRD ($VM_VERSION) ..."
+details=$(kubectl apply --server-side --validate=false -f "$VM_CRD" 2>&1 | tee -a "$LOG_FILE")
+
+if [[ $? -ne 0 ]]; then
+  echo "Failed: $VM_CRD"
+  echo "Details: $details"
 else
-    git clone "$gitUrl" -b "$gitBranch" "$WORKDIR" >> "$LOG_FILE" 2>&1
-    cd "$WORKDIR"
-fi
-
-if [[ -f "$crdfile" ]]; then
-    echo "Applying $crdfile ..."
-    details=$(kubectl apply -f "$crdfile" 2>&1 | tee -a "$LOG_FILE")
-    if [[ $? -ne 0 ]]; then
-        echo "Failed: $crdfile"
-        echo "Details: $details"
-    else
-        echo "Success: $crdfile"
-        echo "Details: $details"
-    fi
-else
-    echo "$crdfile not found in repo!"
+  echo "Success: $VM_CRD"
+  echo "Details: $details"
 fi
 
 echo "All CRDs processed. Check $LOG_FILE for details."
-rm -rf "$WORKDIR"
-
 
 ```
 
@@ -187,7 +174,7 @@ rm -rf "$WORKDIR"
 
 ```bash
 
-./pre-hook-crd.sh git@github.com-apnamart:ot-client/apnamart-gcp.git 011y-victoriametrics-crd victoriametrics-crd.yaml
+./prehook-crd-apply.sh <Cluster_Name> <VM_VERSION>
 
 ```
 
@@ -211,24 +198,8 @@ helm dep update /root/.codebase/workspaces/dev/dev-uat-monitoring/service/monito
 
 ---
 
-## **6. SSH Setup for Private Repo**
 
-```bash
-ssh-keygen -t ed25519 -C "apnamart-o11y" -f ~/.ssh/id_ed25519_011y
-```
-
-Update `~/.ssh/config` from rootand ubuntu both users :-
-
-```
-Host github.com-apnamart
-    HostName github.com
-    User git
-    IdentityFile /home/ubuntu/.ssh/id_ed25519_011y
-```
-
----
-
-## **7. Troubleshooting Node Exporter ConfigMap Deployment**
+## **6. Troubleshooting Node Exporter ConfigMap Deployment**
 
 1. Install `yq` if not present:
     
