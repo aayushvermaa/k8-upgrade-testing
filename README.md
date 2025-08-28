@@ -56,7 +56,7 @@ Create the following environments in BuildPiper:
 ```
 | **Field**                  | **Logging Service** | **Monitoring Service** | **Observability Service** |                  |           |
 |-----------------------------|------------------|----------------------|--------------------------|------------------|-----------|
-|                             |                  |                      | **otel-collector**       | **otel-operators** | **tempo** |
+|      Sub services           |                  |                      | **otel-collector**       | **otel-operators** | **tempo** |
 | **Deployment Name**         | logging-dev      | monitoring-dev       | otel-collector-dev       | otel-operators-dev | tempo-dev |
 | **Service Name**            | logging-dev      | monitoring-dev       | otel-collector-dev       | otel-operators-dev | tempo-dev |
 | **Image Pull Policy**       | Always           | Always               | Always                   | Always            | Always    |
