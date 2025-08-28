@@ -36,12 +36,24 @@ Create the following environments in BuildPiper:
 
 - Step 5: Kubernetes Manifest Apply ---> Images:registry.buildpiper.in/k8s-manifest-apply:2.3
 
-- Step 6: Image Cleaner
 
 ---
 
 
-## **3. Onboarding Services on BP**
+## **4. Onboarding Services on BP**
+
+### BP Service Structure
+
+```bash
+├── Logging
+├── Monitoring
+└── Observability
+    ├── otel-collector-dev-uat-o11y
+    ├── otel-operators-dev-uat-o11y
+    └── tempo-dev-dev-uat-o11y
+
+- You can also change the service names as per the requirement.
+```
 
 	
 ### **1. Onboard Monitoring Service**
@@ -79,7 +91,7 @@ Create the following environments in BuildPiper:
 > NOTE;-
 > Apply the same setup for Observability
 
-## **4. BP Deployment Pre-Hook Workflow**
+## **5. BP Deployment Pre-Hook Workflow**
 
 ### **1. Monitoring CRDs Pre-Hook**
 
@@ -185,7 +197,7 @@ helm dep update /root/.codebase/workspaces/dev/dev-uat-monitoring/service/monito
 
 ---
 
-## **5. SSH Setup for Private Repo**
+## **6. SSH Setup for Private Repo**
 
 ```bash
 ssh-keygen -t ed25519 -C "apnamart-o11y" -f ~/.ssh/id_ed25519_011y
@@ -202,7 +214,7 @@ Host github.com-apnamart
 
 ---
 
-## **6. Troubleshooting Node Exporter ConfigMap Deployment**
+## **7. Troubleshooting Node Exporter ConfigMap Deployment**
 
 1. Install `yq` if not present:
     
