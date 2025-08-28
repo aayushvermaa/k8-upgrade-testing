@@ -26,17 +26,17 @@ Create the following environments in BuildPiper:
 ---
 ## **3. BP Deployment Template**
 
-Step 1: Workspace Clean
+- Step 1: Workspace Clean
 
-Step 2: Clone Repo
+- Step 2: Clone Repo
 
-Step 3: Pre-Hook
+- Step 3: Pre-Hook
 
-Step 4: Manifest Generate using Helm ---> Images:registry.buildpiper.in/k8s-deployment-using-helm:2.4.1.2
+- Step 4: Manifest Generate using Helm ---> Images:registry.buildpiper.in/k8s-deployment-using-helm:2.4.1.2
 
-Step 5: Kubernetes Manifest Apply ---> Images:registry.buildpiper.in/k8s-manifest-apply:2.3
+- Step 5: Kubernetes Manifest Apply ---> Images:registry.buildpiper.in/k8s-manifest-apply:2.3
 
-Step 6: Image Cleaner
+- Step 6: Image Cleaner
 
 ---
 
@@ -44,18 +44,25 @@ Step 6: Image Cleaner
 ## **3. Onboarding Services on BP**
 
 	
-	
 ### **1. Onboard Monitoring Service**
 
 - Configure Deployment Details
 
     <img width="2410" height="1456" alt="image" src="https://github.com/user-attachments/assets/2b161cdd-ec4f-45a2-bad9-01c5f7b88e70" />
 
+> **Note:** The Helm release name must be set to vm for the Monitoring service.
 
-- Pre-Hook for CRDs 
+
+- [Pre-Hook for CRDs and  Helm Dependencies Update](#4-bp-deployment-pre-hook-workflow)
 
     <img width="2350" height="1010" alt="image" src="https://github.com/user-attachments/assets/582f2ab5-4608-4621-bb64-671fe32ef4c0" />
 
+
+Note: For the Monitoring service, you must use both Pre-Hooks:
+
+Pre-Hook for CRDs
+
+Pre-Hook for Helm dependency update
 
 ### **2. Onboard Logging Service**
 
@@ -65,7 +72,8 @@ Step 6: Image Cleaner
 
 
 
-- Pre-Hook for CRDs 
+- [Pre-Hook for Helm Dependencies Update](#2-pre-hook-for-all-services-helm-dependencies-update)
+
 
     <img width="2360" height="636" alt="image" src="https://github.com/user-attachments/assets/186bd14f-baa5-4fad-8575-266ca7d7108d" />
 
@@ -227,7 +235,7 @@ rm -rf "$WORKDIR"
   
 ---
 
-## **2. Pre-Hook for All Services (Helm Dependencies Update)**
+### **2. Pre-Hook for All Services (Helm Dependencies Update)**
 
   
 Before generating manifests for **any service** (logging, monitoring, observability), update Helm dependencies:
@@ -242,7 +250,7 @@ helm dep update /root/.codebase/workspaces/dev/dev-uat-monitoring/service/monito
 
 ---
 
-## **3. SSH Setup for Private Repo**
+## **5. SSH Setup for Private Repo**
 
 ```bash
 ssh-keygen -t ed25519 -C "apnamart-o11y" -f ~/.ssh/id_ed25519_011y
@@ -259,7 +267,7 @@ Host github.com-apnamart
 
 ---
 
-## **5. Troubleshooting Node Exporter ConfigMap Deployment**
+## **6. Troubleshooting Node Exporter ConfigMap Deployment**
 
 1. Install `yq` if not present:
     
