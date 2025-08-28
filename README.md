@@ -81,7 +81,7 @@ Create the following environments in BuildPiper:
 
 - [Pre-Hook for CRDs and  Helm Dependencies Update](#4-bp-deployment-pre-hook-workflow)
 
-    <img width="2350" height="1010" alt="image" src="https://github.com/user-attachments/assets/582f2ab5-4608-4621-bb64-671fe32ef4c0" />
+	<img width="2310" height="1098" alt="image" src="https://github.com/user-attachments/assets/d6862972-3a9a-40e7-9c59-8f83c4d27d0e" />
 
 
 >**Note:** For the Monitoring service, you must use both Pre-Hooks:
