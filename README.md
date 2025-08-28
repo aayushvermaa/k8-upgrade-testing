@@ -54,15 +54,15 @@ Create the following environments in BuildPiper:
 
 - You can also change the service names as per the requirement.
 ```
-
-| **Field**                  | **Logging Service**   | **Monitoring Service** | **Observability Service**                         |
-|-----------------------------|---------------------|---------------------|--------------------------------------------------|
-| **Deployment Name**         | `logging-dev`       | `monitoring-dev`             | `otel-collector-dev` <br> `otel-operators-dev` <br> `tempo-dev` |
-| **Service Name**            | `logging-dev`       | `monitoring-dev`             | `otel-collector-dev` <br> `otel-operators-dev` <br> `tempo-dev` |
-| **Image Pull Policy**       | `Always`            | `Always`             | `Always`                                         |
-| **Resource Kind**           | `Please Select`     | `Please Select`      | `Please Select`                                  |
-| **Widget Data**             | `logging-dev`       | `monitoring-dev`             | `otel-collector-dev` <br> `otel-operators-dev` <br> `tempo-dev` |
-| **Define Raw Key Value Pairs** | `No` (toggle off) | `No` (toggle off)   | `No` (toggle off)                                |
+| **Field**                  | **Logging Service** | **Monitoring Service** | **Observability Service** |                  |           |
+|-----------------------------|------------------|----------------------|--------------------------|------------------|-----------|
+|                             |                  |                      | **otel-collector**       | **otel-operators** | **tempo** |
+| **Deployment Name**         | logging-dev      | monitoring-dev       | otel-collector-dev       | otel-operators-dev | tempo-dev |
+| **Service Name**            | logging-dev      | monitoring-dev       | otel-collector-dev       | otel-operators-dev | tempo-dev |
+| **Image Pull Policy**       | Always           | Always               | Always                   | Always            | Always    |
+| **Resource Kind**           | Please Select    | Please Select        | Please Select            | Please Select     | Please Select |
+| **Widget Data**             | logging-dev      | monitoring-dev       | otel-collector-dev       | otel-operators-dev | tempo-dev |
+| **Define Raw Key Value Pairs** | No (toggle off) | No (toggle off)     | No (toggle off)          | No (toggle off)   | No (toggle off) |
 
 
 > **Note:** The values provided above are **suggested names**. You may change them according to your project requirements.
