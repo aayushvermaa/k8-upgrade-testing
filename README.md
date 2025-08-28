@@ -58,11 +58,9 @@ Create the following environments in BuildPiper:
     <img width="2350" height="1010" alt="image" src="https://github.com/user-attachments/assets/582f2ab5-4608-4621-bb64-671fe32ef4c0" />
 
 
-Note: For the Monitoring service, you must use both Pre-Hooks:
-
-Pre-Hook for CRDs
-
-Pre-Hook for Helm dependency update
+>**Note:** For the Monitoring service, you must use both Pre-Hooks:
+>- Pre-Hook for CRDs.
+>- Pre-Hook for Helm dependency update
 
 ### **2. Onboard Logging Service**
 
