@@ -231,6 +231,12 @@ helm dep update /root/.codebase/workspaces/dev/dev-uat-monitoring/service/monito
 
 ## **6. Troubleshooting Node Exporter ConfigMap Deployment**
 
+If you are facing this issue during the Kubernetes Manifest Apply step, then…
+
+<img width="2836" height="250" alt="image" src="https://github.com/user-attachments/assets/a902fc6b-9158-47cf-9c21-4f861e5dc367" />
+
+
+
 1. [Install `yq` if not present:](#2-yq-installed-for-troubleshooting)
     
 2. Extract specific ConfigMap:
