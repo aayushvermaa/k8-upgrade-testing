@@ -61,8 +61,9 @@ Create the following environments in BuildPiper:
 - Configure Deployment Details
 
     <img width="2410" height="1456" alt="image" src="https://github.com/user-attachments/assets/2b161cdd-ec4f-45a2-bad9-01c5f7b88e70" />
+    
+> **Note:** The Helm release name must be set to `vm` for the Monitoring service.
 
-> **Note:** The Helm release name must be set to **vm** for the Monitoring service.
 
 
 - [Pre-Hook for CRDs and  Helm Dependencies Update](#4-bp-deployment-pre-hook-workflow)
