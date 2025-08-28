@@ -42,7 +42,7 @@ Create the following environments in BuildPiper:
 
 ## **4. Onboarding Services on BP**
 
-### BP Service Structure
+### BP Services Structure
 
 ```bash
 ├── Logging
