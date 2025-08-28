@@ -1,6 +1,36 @@
 
 # **Deploy Logging, Monitoring, and Observability Services via BuildPiper (BP)**
 
+## **Prerequisites**
+
+### 1. **EBS-CSI Plugin**
+
+   * Verify if the **EBS CSI driver plugin** is enabled in the cluster.
+   * Run:
+
+     ```bash
+     kubectl get pods -n kube-system | grep ebs-csi
+     ```
+   * If not installed, enable it via your cloud provider or Helm chart (depends on infra).
+
+### 2. **yq Installed (for troubleshooting)**
+
+   * Check:
+
+     ```bash
+     yq --version
+     ```
+   * If not installed:
+
+     ```bash
+     sudo snap install yq
+     ```
+
+---
+
+
+
+
 ## **1. Create Namespaces via BP**
 
 Create the following namespaces in the cluster:
@@ -201,12 +231,8 @@ helm dep update /root/.codebase/workspaces/dev/dev-uat-monitoring/service/monito
 
 ## **6. Troubleshooting Node Exporter ConfigMap Deployment**
 
-1. Install `yq` if not present:
+1. [Install `yq` if not present:](#2-yq-installed-for-troubleshooting)
     
-```bash
-sudo snap install yq
-```
-
 2. Extract specific ConfigMap:
     
 ```bash
